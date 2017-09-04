@@ -16,12 +16,27 @@ Vagrant.configure("2") do |config|
 
   # The url from where the 'config.vm.box' box will be fetched if it
   # doesn't already exist on the user's system.
-  config.vm.box_url = "http://files.vagrant.com/precise64.box"
-  config.vm.network "forwarded_port", guest: 80, host:8080
+  config.vm.box_url = "http://files.vagrantup.com/precise64.box"
+  
+  #setup for web
+  config.vm.define "web" do |web|
+  	web.vm.hostname = "web"
+	web.vm.box = "apache"
+	web.vm.network "private_network", type: "dhcp"
+	web.vm.network "forwarded_port", guest: 80, host:8080
+	web.vm.provision "puppet" do |puppet|
+		puppet.manifests_path = "manifests"
+		puppet.manifest_file = "default.pp"
+	end
+ end
 
-  config.vm.provision "chef_solo" do |chef|
-    chef.add_recipe "vagrant_la"
-  end
+ #setup for mysql DB server
+ config.vm.define "db" do |db|
+ 	db.vm.hostname = "db"
+	db.vm.box = "mysql"
+	db.vm.network "private_network", type: "dhcp"
+end
+	
 
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
