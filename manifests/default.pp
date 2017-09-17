@@ -12,3 +12,8 @@ file {"/var/www":
 	force => true,
 	}
 
+service { 'apache2':
+  ensure => running,
+    require => Package['apache2'],
+    }
+
