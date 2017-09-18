@@ -20,19 +20,20 @@ Vagrant.configure("2") do |config|
   
   #setup for web
   config.vm.define "web" do |web|
-  	web.vm.hostname = "web"
+  	web.vm.hostname = "web.com"
 	web.vm.box = "apache"
 	web.vm.network "private_network", type: "dhcp"
 	web.vm.network "forwarded_port", guest: 80, host:8080
 	web.vm.provision "puppet" do |puppet|
 		puppet.manifests_path = "manifests"
 		puppet.manifest_file = "default.pp"
+		# puppet.options = "--verbose --debug"
 	end
  end
 
  #setup for mysql DB server
  config.vm.define "db" do |db|
- 	db.vm.hostname = "db"
+ 	db.vm.hostname = "db.com"
 	db.vm.box = "mysql"
 	db.vm.network "private_network", type: "dhcp"
 end
